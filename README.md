@@ -20,6 +20,7 @@ tudo mais — para entregar o catálogo de produtos exibido no frontend.
 - [Como rodar](#como-rodar)
 - [Referência da API SOAP](#referência-da-api-soap)
 - [Stack técnica](#stack-técnica)
+- [Deploy: frontend no GitHub Pages + backend em um servidor](#deploy-frontend-no-github-pages--backend-em-um-servidor)
 - [Licença](#licença)
 
 ## Visão geral
@@ -187,6 +188,36 @@ inspecionar o protocolo em ação.
 | Backend | Python 3 + Flask |
 | Serialização SOAP | `xml.etree.ElementTree` (sem frameworks SOAP externos) |
 | Frontend | HTML, CSS e JavaScript puros (sem build step, sem dependências) |
+
+## Deploy: frontend no GitHub Pages + backend em um servidor
+
+Localmente, o Flask serve o frontend e a API pela mesma origem. Em produção,
+frontend e backend costumam ficar em domínios diferentes (GitHub Pages só
+serve arquivos estáticos, não roda Python), então é preciso:
+
+### Backend
+
+1. Hospedar `backend/` em um serviço com suporte a Python (Render, Railway,
+   Fly.io, uma VPS, etc.), usando `backend/requirements.txt`.
+2. Rodar com um servidor WSGI de produção em vez do `python app.py`, ex:
+   ```bash
+   gunicorn --chdir backend app:app
+   ```
+3. Definir a variável de ambiente `ALLOWED_ORIGIN` com a URL do frontend no
+   GitHub Pages (ex: `https://usuario.github.io`), para o CORS liberar só
+   essa origem. Sem definir, o padrão é `*` (qualquer origem — ok para
+   testar, não recomendado em produção).
+
+### Frontend
+
+1. O workflow `.github/workflows/deploy-pages.yml` publica automaticamente
+   o conteúdo de `frontend/` no GitHub Pages a cada push em `main`. Basta
+   habilitar Pages nas configurações do repositório (Settings → Pages →
+   Source: "GitHub Actions").
+2. Em `frontend/script.js`, defina `API_BASE_URL` com a URL pública do
+   backend hospedado (ex: `"https://protocolo-soap.onrender.com"`). Com
+   `API_BASE_URL = ""` (padrão), o frontend só funciona quando servido pelo
+   próprio Flask.
 
 ## Licença
 
