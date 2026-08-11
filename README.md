@@ -195,18 +195,25 @@ Localmente, o Flask serve o frontend e a API pela mesma origem. Em produção,
 frontend e backend costumam ficar em domínios diferentes (GitHub Pages só
 serve arquivos estáticos, não roda Python), então é preciso:
 
-### Backend
+### Backend (Render)
 
-1. Hospedar `backend/` em um serviço com suporte a Python (Render, Railway,
-   Fly.io, uma VPS, etc.), usando `backend/requirements.txt`.
-2. Rodar com um servidor WSGI de produção em vez do `python app.py`, ex:
-   ```bash
-   gunicorn --chdir backend app:app
-   ```
-3. Definir a variável de ambiente `ALLOWED_ORIGIN` com a URL do frontend no
-   GitHub Pages (ex: `https://usuario.github.io`), para o CORS liberar só
-   essa origem. Sem definir, o padrão é `*` (qualquer origem — ok para
-   testar, não recomendado em produção).
+O `render.yaml` na raiz do repositório já descreve o serviço (Blueprint):
+
+1. No [dashboard do Render](https://dashboard.render.com), escolha **New +
+   → Blueprint** e selecione este repositório. O Render lê o `render.yaml`
+   e cria automaticamente um Web Service Python rodando
+   `gunicorn app:app` a partir de `backend/`.
+2. Ajuste a variável de ambiente `ALLOWED_ORIGIN` (já pré-configurada no
+   `render.yaml`) para a URL real do seu GitHub Pages, ex:
+   `https://lianeheidemann.github.io` — isso restringe o CORS a essa
+   origem. Sem essa variável, o padrão é `*` (qualquer origem).
+3. Depois do deploy, o Render fornece uma URL pública (ex:
+   `https://protocolo-soap-backend.onrender.com`) — é ela que vai em
+   `API_BASE_URL` no frontend (próxima seção).
+
+Sem Blueprint, qualquer outro serviço com suporte a Python (Railway,
+Fly.io, uma VPS, etc.) também funciona: instale `backend/requirements.txt`
+e rode `gunicorn --chdir backend app:app`.
 
 ### Frontend
 
