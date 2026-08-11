@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: protocolo-soap-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      # Origem do frontend no GitHub Pages (troque pelo domínio real do
+      # seu Pages: <usuario>.github.io, sem caminho).
+      - key: ALLOWED_ORIGIN
+        value: https://lianeheidemann.github.io
