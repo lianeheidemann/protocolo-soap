@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bolha &amp; Cia · Protocolo SOAP</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🫧</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bubbles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow">🫧 Bolha &amp; Cia</p>
+    <h1>Sabonetes artesanais, entregues via <span>SOAP</span></h1>
+    <p class="subtitle">
+      Um catálogo bem simples onde o trocadilho é proposital: o backend fala
+      literalmente o protocolo <strong>SOAP</strong> (envelope XML e tudo) para
+      te entregar três sabonetes.
+    </p>
+  </header>
+
+  <main>
+    <section id="status" class="status" role="status" aria-live="polite">
+      Consultando o serviço SOAP…
+    </section>
+
+    <section id="catalogo" class="catalogo" aria-live="polite"></section>
+
+    <details class="soap-details">
+      <summary>Ver o envelope SOAP enviado / recebido</summary>
+      <div class="soap-payloads">
+        <div>
+          <h3>Requisição</h3>
+          <pre id="soap-request"></pre>
+        </div>
+        <div>
+          <h3>Resposta</h3>
+          <pre id="soap-response"></pre>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <footer>
+    <p>Projeto de demonstração do protocolo SOAP · feito com Flask + XML puro no backend.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
