@@ -1,15 +1,24 @@
-# 🫧 Bolha & Cia — Protocolo SOAP
+# Bolha & Cia — Protocolo SOAP
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white)
 ![SOAP](https://img.shields.io/badge/Protocol-SOAP%201.1-0f6ab4)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-Aplicação de referência para demonstrar o protocolo **SOAP** (Simple Object
-Access Protocol) na prática. O trocadilho é proposital: o tema do projeto é
-uma lojinha fictícia de **sabonetes** artesanais chamada "Bolha & Cia", cujo
-backend fala literalmente SOAP — envelopes XML, `soap:Body`, `SOAPAction` e
-tudo mais — para entregar o catálogo de produtos exibido no frontend.
+Aplicação de referência que implementa o protocolo **SOAP** (Simple Object
+Access Protocol) do zero, sem frameworks SOAP externos. O backend em Flask
+monta e interpreta envelopes XML manualmente — `soap:Envelope`,
+`soap:Body`, `SOAPAction` — e o frontend consome esse serviço para exibir
+um catálogo de produtos ("Bolha & Cia", uma lojinha fictícia de sabonetes
+artesanais usada como caso de uso).
+
+**Demo ao vivo:**
+[Frontend (GitHub Pages)](https://lianeheidemann.github.io/protocolo-soap/) ·
+[Backend / WSDL (Render)](https://protocolo-soap-backend.onrender.com/soap/wsdl)
+
+> O backend está hospedado no plano gratuito do Render, que hiberna após
+> período de inatividade — a primeira requisição depois de um tempo sem uso
+> pode levar 30–50s para responder.
 
 ## Índice
 
@@ -22,19 +31,19 @@ tudo mais — para entregar o catálogo de produtos exibido no frontend.
 - [Stack técnica](#stack-técnica)
 - [Deploy: frontend no GitHub Pages + backend em um servidor](#deploy-frontend-no-github-pages--backend-em-um-servidor)
 - [Licença](#licença)
+- [Autoria](#autoria)
 
 ## Visão geral
 
-- **Backend**: um servidor Flask que expõe um serviço SOAP em `POST /soap`.
-  Ele monta e interpreta envelopes XML manualmente (sem frameworks SOAP
-  externos), para deixar visível a estrutura real do protocolo.
-- **Frontend**: uma página estática que monta o envelope de requisição em
+- **Backend**: servidor Flask que expõe um serviço SOAP em `POST /soap`.
+  Monta e interpreta envelopes XML manualmente (sem frameworks SOAP
+  externos), deixando visível a estrutura real do protocolo.
+- **Frontend**: página estática que monta o envelope de requisição em
   JavaScript, envia via `fetch`, faz o parsing do XML de resposta com
-  `DOMParser` e renderiza os sabonetes em um catálogo com visual moderno
-  (glassmorphism, bolhas animadas, paleta pastel).
-- **Catálogo de produtos**: cada sabonete é ilustrado por uma imagem local
-  (`backend/images/`) — lavanda, carvão ativado e cítrico — servida pelo
-  backend e referenciada na resposta SOAP.
+  `DOMParser` e renderiza o catálogo com visual moderno (glassmorphism,
+  bolhas animadas, paleta pastel).
+- **Catálogo de produtos**: cada item é ilustrado por uma imagem local
+  (`backend/images/`), servida pelo backend e referenciada na resposta SOAP.
 
 ## Arquitetura
 
@@ -239,10 +248,14 @@ e rode `gunicorn --chdir backend app:app`.
    habilitar Pages nas configurações do repositório (Settings → Pages →
    Source: "GitHub Actions").
 2. Em `frontend/script.js`, defina `API_BASE_URL` com a URL pública do
-   backend hospedado (ex: `"https://protocolo-soap.onrender.com"`). Com
-   `API_BASE_URL = ""` (padrão), o frontend só funciona quando servido pelo
-   próprio Flask.
+   backend hospedado (ex: `"https://protocolo-soap-backend.onrender.com"`).
+   Com `API_BASE_URL = ""` (padrão), o frontend só funciona quando servido
+   pelo próprio Flask.
 
 ## Licença
 
 Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais detalhes.
+
+## Autoria
+
+Desenvolvido por [Liane Heidemann](https://github.com/lianeheidemann).
