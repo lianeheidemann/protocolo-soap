@@ -3,11 +3,15 @@
 const SOAP_NS = "http://schemas.xmlsoap.org/soap/envelope/";
 const BC_NS = "http://bolhaecia.local/soap";
 
-// Em desenvolvimento local (Flask servindo o frontend na mesma origem),
-// usa caminho relativo. Em qualquer outro host (ex: GitHub Pages), aponta
-// para o backend hospedado no Render.
-const EH_LOCALHOST = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-const API_BASE_URL = EH_LOCALHOST ? "" : "https://protocolo-soap-backend.onrender.com";
+// Só usa o backend do Render quando a página está no domínio de produção
+// do GitHub Pages. Em qualquer outro host (localhost, 127.0.0.1, IP da
+// WSL, IP da rede local etc.) usa caminho relativo, já que nesses casos
+// é sempre o próprio Flask que está servindo a página e a API.
+const PRODUCTION_HOSTNAME = "lianeheidemann.github.io";
+const API_BASE_URL =
+  window.location.hostname === PRODUCTION_HOSTNAME
+    ? "https://protocolo-soap-backend.onrender.com"
+    : "";
 
 const statusEl = document.getElementById("status");
 const catalogoEl = document.getElementById("catalogo");
