@@ -32,9 +32,9 @@ tudo mais — para entregar o catálogo de produtos exibido no frontend.
   JavaScript, envia via `fetch`, faz o parsing do XML de resposta com
   `DOMParser` e renderiza os sabonetes em um catálogo com visual moderno
   (glassmorphism, bolhas animadas, paleta pastel).
-- **Catálogo de produtos**: cada sabonete é ilustrado por um SVG gerado
-  localmente (`backend/images/*.svg`) — lavanda, carvão ativado e cítrico —
-  servido pelo backend e referenciado na resposta SOAP.
+- **Catálogo de produtos**: cada sabonete é ilustrado por uma imagem local
+  (`backend/images/`) — lavanda, carvão ativado e cítrico — servida pelo
+  backend e referenciada na resposta SOAP.
 
 ## Arquitetura
 
@@ -45,7 +45,7 @@ tudo mais — para entregar o catálogo de produtos exibido no frontend.
 └──────────────┘   envelope XML de resposta     └───────────────────┘
                                                           │
                                                           ▼
-                                                  backend/images/*.svg
+                                                  backend/images/*.png
 ```
 
 O mesmo processo Flask serve o frontend estático, o endpoint SOAP e as
@@ -56,14 +56,15 @@ imagens — não há necessidade de subir servidores separados.
 ```
 protocolo-soap/
 ├── README.md
+├── LICENSE
 ├── backend/
 │   ├── app.py             # servidor Flask: rotas /, /soap, /soap/wsdl, /images
 │   ├── soap_service.py    # montagem/parsing dos envelopes SOAP (XML puro)
 │   ├── requirements.txt
 │   └── images/
-│       ├── sabonete-lavanda.svg
-│       ├── sabonete-carvao.svg
-│       └── sabonete-citrus.svg
+│       ├── sabonete-lavanda.png
+│       ├── sabonete-carvao.png
+│       └── sabonete-citrus.png
 └── frontend/
     ├── index.html
     ├── style.css
@@ -78,30 +79,46 @@ protocolo-soap/
 
 ## Como rodar
 
-### Linux / macOS
+> ⚠️ **Já tem o repositório aberto/clonado?** Pule esta etapa — não rode
+> `git clone` de novo dentro dele, ou você acaba com uma cópia duplicada
+> aninhada (`protocolo-soap/protocolo-soap/...`). Vá direto para
+> "Instalar e rodar" abaixo.
+
+### Clonar o repositório (só se ainda não tiver uma cópia local)
 
 ```bash
-cd protocolo-soap/backend
+git clone https://github.com/lianeheidemann/protocolo-soap.git
+```
+
+### Instalar e rodar
+
+Os comandos a seguir assumem que o terminal já está na raiz do repositório
+(a pasta `protocolo-soap/`, onde estão as pastas `backend/` e `frontend/`).
+
+#### Linux / macOS
+
+```bash
+cd backend
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
 
-### Windows (PowerShell)
+#### Windows (PowerShell)
 
 ```powershell
-cd protocolo-soap/backend
+cd backend
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python app.py
 ```
 
-### Windows (cmd)
+#### Windows (cmd)
 
 ```cmd
-cd protocolo-soap/backend
+cd backend
 python -m venv .venv
 .venv\Scripts\activate.bat
 pip install -r requirements.txt
@@ -121,7 +138,7 @@ no navegador.
 |---|---|---|
 | `/soap` | `POST` | Ponto de entrada do serviço SOAP. Recebe um `soap:Envelope` e retorna outro. |
 | `/soap/wsdl` | `GET` | Descrição simplificada do serviço, no estilo WSDL. |
-| `/images/<arquivo>` | `GET` | Serve os SVGs dos sabonetes referenciados nas respostas SOAP. |
+| `/images/<arquivo>` | `GET` | Serve as imagens dos sabonetes referenciadas nas respostas SOAP. |
 | `/` | `GET` | Serve o frontend estático. |
 
 ### Operação `ListarSabonetes`
@@ -153,7 +170,7 @@ e a URL da sua imagem:
         <bc:Id>1</bc:Id>
         <bc:Nome>Sabonete de Lavanda</bc:Nome>
         <bc:Descricao>Aroma relaxante com flores de lavanda desidratadas.</bc:Descricao>
-        <bc:ImagemUrl>http://localhost:5000/images/sabonete-lavanda.svg</bc:ImagemUrl>
+        <bc:ImagemUrl>http://localhost:5000/images/sabonete-lavanda.png</bc:ImagemUrl>
       </bc:Sabonete>
       <!-- ... demais sabonetes ... -->
     </bc:ListarSabonetesResponse>

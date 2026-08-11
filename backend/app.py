@@ -3,7 +3,7 @@ Backend do "Bolha & Cia" — demonstração simples do protocolo SOAP.
 
 Serve:
   - o frontend estático (../frontend)
-  - as imagens dos três sabonetes (/images/<arquivo>.svg)
+  - as imagens dos três sabonetes (/images/<arquivo>.png)
   - o serviço SOAP em si (POST /soap), que recebe um envelope XML
     com a operação <bc:ListarSabonetes/> e responde com um envelope
     XML contendo os três produtos e a URL da imagem de cada um.
@@ -47,8 +47,12 @@ def frontend_assets(filename):
 
 @app.get("/images/<path:filename>")
 def images(filename):
-    # Serve os SVGs dos sabonetes referenciados nas respostas SOAP.
-    return send_from_directory(IMAGES_DIR, filename, mimetype="image/svg+xml")
+    # Serve as imagens dos sabonetes referenciadas nas respostas SOAP.
+    # O mimetype é detectado a partir da extensão do arquivo (svg, png, etc.).
+    # max_age é seguro aqui porque a URL inclui ?v=<mtime> (ver soap_service.
+    # _versao_arquivo): se o arquivo mudar, a URL muda, então cache antigo
+    # nunca é reaproveitado por engano.
+    return send_from_directory(IMAGES_DIR, filename, max_age=31536000)
 
 
 @app.post("/soap")

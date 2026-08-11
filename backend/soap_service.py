@@ -5,6 +5,7 @@ Este módulo monta e interpreta envelopes SOAP (XML) manualmente, sem
 frameworks externos, para deixar visível a estrutura do protocolo:
 Envelope -> Header -> Body -> Operação.
 """
+from pathlib import Path
 from xml.etree import ElementTree as ET
 from xml.sax.saxutils import escape
 
@@ -13,6 +14,8 @@ NAMESPACES = {
     "bc": "http://bolhaecia.local/soap",
 }
 
+IMAGES_DIR = Path(__file__).resolve().parent / "images"
+
 # Catálogo fixo com os três sabonetes (as "três imagens diferentes"
 # que o backend fornece para o frontend exibir).
 CATALOGO = [
@@ -20,19 +23,19 @@ CATALOGO = [
         "id": "1",
         "nome": "Sabonete de Lavanda",
         "descricao": "Aroma relaxante com flores de lavanda desidratadas.",
-        "imagem": "sabonete-lavanda.svg",
+        "imagem": "sabonete-lavanda.png",
     },
     {
         "id": "2",
         "nome": "Sabonete de Carvão Ativado",
         "descricao": "Purificante, indicado para peles oleosas.",
-        "imagem": "sabonete-carvao.svg",
+        "imagem": "sabonete-carvao.png",
     },
     {
         "id": "3",
         "nome": "Sabonete Cítrico",
         "descricao": "Mistura revigorante de laranja e limão siciliano.",
-        "imagem": "sabonete-citrus.svg",
+        "imagem": "sabonete-citrus.png",
     },
 ]
 
@@ -60,13 +63,26 @@ def build_fault(mensagem: str) -> str:
 </soap:Envelope>"""
 
 
+def _versao_arquivo(nome_arquivo: str) -> int:
+    """Timestamp de modificação do arquivo, usado como cache-buster na URL.
+
+    Assim, sempre que a imagem for substituída (novo mtime), a URL muda e o
+    navegador busca o conteúdo novo em vez de reaproveitar um cache antigo.
+    """
+    try:
+        return int((IMAGES_DIR / nome_arquivo).stat().st_mtime)
+    except OSError:
+        return 0
+
+
 def build_listar_sabonetes_response(base_url: str) -> str:
     """Monta a resposta SOAP com os três sabonetes e a URL de cada imagem."""
     itens_xml = ""
     for item in CATALOGO:
         # A URL da imagem é montada como absoluta (com host) para que o
-        # frontend possa usá-la diretamente no atributo src do <img>.
-        imagem_url = f"{base_url}/images/{item['imagem']}"
+        # frontend possa usá-la diretamente no atributo src do <img>. A
+        # query string ?v= é o cache-buster (ver _versao_arquivo).
+        imagem_url = f"{base_url}/images/{item['imagem']}?v={_versao_arquivo(item['imagem'])}"
         # escape() evita que textos do catálogo quebrem o XML caso
         # contenham caracteres especiais como & ou <.
         itens_xml += f"""
