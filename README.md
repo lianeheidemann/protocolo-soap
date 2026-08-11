@@ -40,6 +40,8 @@ protocolo-soap/
 
 ## Como rodar
 
+### Linux / macOS
+
 ```bash
 cd protocolo-soap/backend
 python3 -m venv .venv
@@ -47,6 +49,30 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
+
+### Windows (PowerShell)
+
+```powershell
+cd protocolo-soap/backend
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+python app.py
+```
+
+### Windows (cmd)
+
+```cmd
+cd protocolo-soap/backend
+python -m venv .venv
+.venv\Scripts\activate.bat
+pip install -r requirements.txt
+python app.py
+```
+
+> No PowerShell, se a ativação do venv falhar por causa da política de
+> execução de scripts, rode uma vez:
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 
 Abra [http://localhost:5000](http://localhost:5000) no navegador. O próprio
 Flask serve o frontend (`../frontend`), então não é preciso subir dois
