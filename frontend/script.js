@@ -3,11 +3,10 @@
 const SOAP_NS = "http://schemas.xmlsoap.org/soap/envelope/";
 const BC_NS = "http://bolhaecia.local/soap";
 
-// Quando o frontend é servido pelo próprio Flask (desenvolvimento local),
-// "" (caminho relativo) funciona. Se o frontend estiver hospedado em outro
-// domínio (ex: GitHub Pages), defina aqui a URL completa do backend, ex:
-// "https://protocolo-soap.onrender.com".
-const API_BASE_URL = "";
+// URL do backend hospedado no Render. Quando o frontend for servido pelo
+// próprio Flask (desenvolvimento local), "" (caminho relativo) também
+// funciona, já que o Flask serve os dois na mesma origem.
+const API_BASE_URL = "https://protocolo-soap-backend.onrender.com";
 
 const statusEl = document.getElementById("status");
 const catalogoEl = document.getElementById("catalogo");
