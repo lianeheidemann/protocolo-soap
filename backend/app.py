@@ -26,6 +26,7 @@ SOAP_CONTENT_TYPE = "text/xml; charset=utf-8"
 
 @app.get("/")
 def index():
+    # Rota raiz: entrega a página principal do frontend estático.
     return send_from_directory(FRONTEND_DIR, "index.html")
 
 
@@ -37,16 +38,21 @@ def frontend_assets(filename):
 
 @app.get("/images/<path:filename>")
 def images(filename):
+    # Serve os SVGs dos sabonetes referenciados nas respostas SOAP.
     return send_from_directory(IMAGES_DIR, filename, mimetype="image/svg+xml")
 
 
 @app.post("/soap")
 def soap_endpoint():
+    # Único endpoint SOAP da aplicação: recebe o envelope XML cru no corpo
+    # da requisição (sem depender de biblioteca SOAP, é XML puro).
     body = request.get_data(as_text=True)
 
     try:
         operacao = soap_service.parse_operation(body)
     except Exception:
+        # Qualquer erro de parsing (XML malformado, Body ausente etc.)
+        # vira um soap:Fault com HTTP 400, como manda o protocolo.
         return Response(
             soap_service.build_fault("Envelope SOAP inválido ou malformado."),
             status=400,
@@ -54,12 +60,14 @@ def soap_endpoint():
         )
 
     if operacao != "ListarSabonetes":
+        # Só existe uma operação suportada; qualquer outra também é Fault.
         return Response(
             soap_service.build_fault(f"Operação '{operacao}' não suportada."),
             status=400,
             mimetype=SOAP_CONTENT_TYPE,
         )
 
+    # base_url é usada para montar a URL absoluta de cada imagem de sabonete.
     base_url = request.host_url.rstrip("/")
     resposta = soap_service.build_listar_sabonetes_response(base_url)
     return Response(resposta, mimetype=SOAP_CONTENT_TYPE)
@@ -67,6 +75,8 @@ def soap_endpoint():
 
 @app.get("/soap/wsdl")
 def wsdl():
+    # WSDL simplificado, só para leitura/consulta — não é usado pelo
+    # frontend, serve apenas para documentar o serviço.
     doc = f"""<?xml version="1.0" encoding="UTF-8"?>
 <definitions name="ProtocoloSoapService"
              targetNamespace="{soap_service.NAMESPACES['bc']}"
@@ -93,4 +103,6 @@ def wsdl():
 
 
 if __name__ == "__main__":
+    # debug=True habilita reload automático e páginas de erro detalhadas;
+    # usar apenas em desenvolvimento local, nunca em produção.
     app.run(host="0.0.0.0", port=5000, debug=True)

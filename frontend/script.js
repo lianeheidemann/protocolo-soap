@@ -1,3 +1,5 @@
+// Namespaces XML usados no envelope SOAP, precisam bater com os do backend
+// (ver NAMESPACES em backend/soap_service.py) para o parsing funcionar.
 const SOAP_NS = "http://schemas.xmlsoap.org/soap/envelope/";
 const BC_NS = "http://bolhaecia.local/soap";
 
@@ -6,6 +8,8 @@ const catalogoEl = document.getElementById("catalogo");
 const reqPreEl = document.getElementById("soap-request");
 const resPreEl = document.getElementById("soap-response");
 
+// Monta, como string, o envelope SOAP de requisição para a operação
+// ListarSabonetes (não há corpo/parâmetros, é só a tag da operação).
 function montarEnvelopeRequisicao() {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <soap:Envelope xmlns:soap="${SOAP_NS}" xmlns:bc="${BC_NS}">
@@ -16,6 +20,7 @@ function montarEnvelopeRequisicao() {
 </soap:Envelope>`;
 }
 
+// Transforma um sabonete (já extraído do XML) em um card visual do catálogo.
 function renderizarCard(item) {
   const card = document.createElement("article");
   card.className = "card";
@@ -28,6 +33,9 @@ function renderizarCard(item) {
   return card;
 }
 
+// Lê o XML de resposta e converte cada <bc:Sabonete> em um objeto JS simples.
+// getElementsByTagNameNS é necessário porque os elementos estão em um
+// namespace próprio (BC_NS), não no namespace padrão do documento.
 function extrairSabonetes(xmlDoc) {
   const nodes = Array.from(xmlDoc.getElementsByTagNameNS(BC_NS, "Sabonete"));
   return nodes.map((node) => ({
@@ -38,6 +46,8 @@ function extrairSabonetes(xmlDoc) {
   }));
 }
 
+// Fluxo principal: envia a requisição SOAP, mostra os envelopes trocados
+// na tela (para fins didáticos) e renderiza o catálogo recebido.
 async function carregarCatalogo() {
   const envelope = montarEnvelopeRequisicao();
   reqPreEl.textContent = envelope;
@@ -47,6 +57,8 @@ async function carregarCatalogo() {
       method: "POST",
       headers: {
         "Content-Type": "text/xml; charset=utf-8",
+        // SOAPAction é o cabeçalho tradicional do protocolo SOAP 1.1 para
+        // indicar qual operação está sendo chamada.
         SOAPAction: "ListarSabonetes",
       },
       body: envelope,
@@ -56,6 +68,7 @@ async function carregarCatalogo() {
     resPreEl.textContent = textoResposta;
 
     if (!resposta.ok) {
+      // HTTP não-2xx aqui normalmente significa que o corpo é um soap:Fault.
       throw new Error("O serviço SOAP retornou um erro.");
     }
 
@@ -75,4 +88,5 @@ async function carregarCatalogo() {
   }
 }
 
+// Dispara a busca do catálogo assim que a página carrega este script.
 carregarCatalogo();
