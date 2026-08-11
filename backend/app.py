@@ -9,9 +9,11 @@ Serve:
     XML contendo os três produtos e a URL da imagem de cada um.
   - um WSDL simplificado em GET /soap/wsdl, só para leitura/consulta.
 """
+import os
 from pathlib import Path
 
 from flask import Flask, Response, request, send_from_directory
+from flask_cors import CORS
 
 import soap_service
 
@@ -22,6 +24,13 @@ IMAGES_DIR = BASE_DIR / "images"
 app = Flask(__name__)
 
 SOAP_CONTENT_TYPE = "text/xml; charset=utf-8"
+
+# Quando o frontend é hospedado separadamente (ex: GitHub Pages), as
+# chamadas a /soap e /images vêm de outra origem. ALLOWED_ORIGIN permite
+# restringir isso em produção (ex: "https://usuario.github.io"); o padrão
+# "*" libera qualquer origem, adequado só para desenvolvimento/demo.
+ALLOWED_ORIGIN = os.environ.get("ALLOWED_ORIGIN", "*")
+CORS(app, resources={r"/soap": {"origins": ALLOWED_ORIGIN}, r"/images/*": {"origins": ALLOWED_ORIGIN}})
 
 
 @app.get("/")
@@ -104,5 +113,6 @@ def wsdl():
 
 if __name__ == "__main__":
     # debug=True habilita reload automático e páginas de erro detalhadas;
-    # usar apenas em desenvolvimento local, nunca em produção.
+    # usar apenas em desenvolvimento local, nunca em produção. Em produção,
+    # rode com um servidor WSGI (ex: gunicorn app:app).
     app.run(host="0.0.0.0", port=5000, debug=True)

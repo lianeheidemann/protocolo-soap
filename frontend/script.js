@@ -3,6 +3,12 @@
 const SOAP_NS = "http://schemas.xmlsoap.org/soap/envelope/";
 const BC_NS = "http://bolhaecia.local/soap";
 
+// Quando o frontend é servido pelo próprio Flask (desenvolvimento local),
+// "" (caminho relativo) funciona. Se o frontend estiver hospedado em outro
+// domínio (ex: GitHub Pages), defina aqui a URL completa do backend, ex:
+// "https://protocolo-soap.onrender.com".
+const API_BASE_URL = "";
+
 const statusEl = document.getElementById("status");
 const catalogoEl = document.getElementById("catalogo");
 const reqPreEl = document.getElementById("soap-request");
@@ -53,7 +59,7 @@ async function carregarCatalogo() {
   reqPreEl.textContent = envelope;
 
   try {
-    const resposta = await fetch("/soap", {
+    const resposta = await fetch(`${API_BASE_URL}/soap`, {
       method: "POST",
       headers: {
         "Content-Type": "text/xml; charset=utf-8",
