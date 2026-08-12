@@ -258,6 +258,6 @@ e rode `gunicorn --chdir backend app:app`.
 
 Distribuído sob a licença MIT. Veja [LICENSE](LICENSE) para mais detalhes.
 
-## Autoria
+---
 
-Desenvolvido por [Liane Heidemann](https://github.com/lianeheidemann).
+<p align="center">Developed by <strong>Liane Heidemann</strong></p>
