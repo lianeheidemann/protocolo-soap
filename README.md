@@ -1,9 +1,9 @@
 # Bolha & Cia — Protocolo SOAP
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white)
-![SOAP](https://img.shields.io/badge/Protocol-SOAP%201.1-0f6ab4)
-![License](https://img.shields.io/badge/license-MIT-green)
+![Python](https://img.shields.io/badge/Python-3.9%2B-b79cf2?style=flat-square&logo=python&logoColor=white&labelColor=372b4d)
+![Flask](https://img.shields.io/badge/Flask-3.0-7c53c9?style=flat-square&logo=flask&logoColor=white&labelColor=372b4d)
+![SOAP](https://img.shields.io/badge/Protocolo-SOAP%201.1-d68fe0?style=flat-square&logo=xml&logoColor=white&labelColor=372b4d)
+![License](https://img.shields.io/badge/Licen%C3%A7a-MIT-b79cf2?style=flat-square&labelColor=372b4d)
 
 Aplicação de referência que implementa o protocolo **SOAP** (Simple Object
 Access Protocol) do zero, sem frameworks SOAP externos. O backend em Flask
