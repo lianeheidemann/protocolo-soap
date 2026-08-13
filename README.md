@@ -1,5 +1,10 @@
 # Bolha & Cia — Protocolo SOAP
 
+
+<img width="15%" alt="" src="./assets/badge_under-construction_v1.svg">
+
+
+
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.0-000000?logo=flask&logoColor=white)
 ![SOAP](https://img.shields.io/badge/Protocol-SOAP%201.1-0f6ab4)
