@@ -20,7 +20,13 @@ artesanais usada como caso de uso).
 > período de inatividade — a primeira requisição depois de um tempo sem uso
 > pode levar 30–50s para responder.
 
-![Captura de tela do catálogo Bolha & Cia](assets/screenshot.png)
+## Interface
+
+#### Desktop 
+<img width="80%" alt="" src="./assets/interface-desktop.gif?v=3">
+
+#### Mobile
+<img width="30%" alt="" src="./assets/interface-mobile.gif?v=3">
 
 ## Índice
 
