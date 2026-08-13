@@ -56,13 +56,13 @@ artesanais usada como caso de uso).
 ## Arquitetura
 
 ```
-┌──────────────┐   POST /soap (envelope XML)   ┌───────────────────┐
-│   Frontend    │ ─────────────────────────────▶│      Backend       │
-│ (HTML/CSS/JS) │◀───────────────────────────── │  Flask + XML puro  │
-└──────────────┘   envelope XML de resposta     └───────────────────┘
-                                                          │
-                                                          ▼
-                                                  backend/images/*.png
+┌──────────────┐   POST /soap (envelope XML)       ┌──────────────────┐
+│   Frontend    │ ─────────────────────────────▶ │      Backend       │
+│ (HTML/CSS/JS) │◀─────────────────────────────  │  Flask + XML puro  │
+└──────────────┘   envelope XML de resposta        └──────────────────┘
+                                                               │ 
+                                                               ▼
+                                                       backend/images/*.png
 ```
 
 O mesmo processo Flask serve o frontend estático, o endpoint SOAP e as
